@@ -1,4 +1,4 @@
-# Qiniu Resource Storage Windows SDK for C/C++
+# Qiniu Resource Storage C/C++ Windows SDK
 
 [![Build Status](https://api.travis-ci.org/qiniu/c-sdk.png?branch=master)](https://travis-ci.org/qiniu/c-sdk)
 
