@@ -21,6 +21,7 @@
 #ifdef _WIN32
 
 #include <sys/types.h>
+#pragma comment(lib, "qiniu.lib")
 
 #ifndef _W64
 #define _W64
