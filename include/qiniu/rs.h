@@ -12,6 +12,8 @@
 
 #include "http.h"
 
+#pragma pack(1)
+
 /*============================================================================*/
 /* type PutPolicy, GetPolicy */
 
@@ -61,6 +63,85 @@ Qiniu_Error Qiniu_RS_Stat(
 Qiniu_Error Qiniu_RS_Delete(Qiniu_Client* self, const char* bucket, const char* key);
 
 /*============================================================================*/
+/* func Qiniu_RS_Copy */
+
+Qiniu_Error Qiniu_RS_Copy(Qiniu_Client* self, 
+        const char* tableNameSrc, const char* keySrc, 
+        const char* tableNameDest, const char* keyDest);
+
+/*============================================================================*/
+/* func Qiniu_RS_Move */
+
+Qiniu_Error Qiniu_RS_Move(Qiniu_Client* self, 
+        const char* tableNameSrc, const char* keySrc, 
+        const char* tableNameDest, const char* keyDest);
+
+/*============================================================================*/
+/* func Qiniu_RS_BatchStat */
+
+/* @gist entrypath */
+
+typedef struct _Qiniu_RS_EntryPath {
+    const char* bucket;
+    const char* key;
+} Qiniu_RS_EntryPath;
+
+/* @endgist */
+
+/* @gist batchstatret */
+
+typedef struct _Qiniu_RS_BatchStatRet {
+    Qiniu_RS_StatRet data;
+    const char* error;
+    int code;
+}Qiniu_RS_BatchStatRet;
+
+/* @endgist */
+
+typedef int Qiniu_ItemCount;
+
+Qiniu_Error Qiniu_RS_BatchStat(
+        Qiniu_Client* self, Qiniu_RS_BatchStatRet* rets,
+        Qiniu_RS_EntryPath* entries, Qiniu_ItemCount entryCount);
+
+/*============================================================================*/
+/* func Qiniu_RS_BatchDelete */
+
+/* @gist batchitemret */
+
+typedef struct _Qiniu_RS_BatchItemRet {
+    const char* error;
+    int code;
+}Qiniu_RS_BatchItemRet;
+
+/* @endgist */
+
+Qiniu_Error Qiniu_RS_BatchDelete(
+        Qiniu_Client* self, Qiniu_RS_BatchItemRet* rets,
+        Qiniu_RS_EntryPath* entries, Qiniu_ItemCount entryCount);
+
+/*============================================================================*/
+/* func Qiniu_RS_BatchMove/Copy */
+
+/* @gist entrypathpair */
+
+typedef struct _Qiniu_RS_EntryPathPair {
+    Qiniu_RS_EntryPath src;
+    Qiniu_RS_EntryPath dest;
+} Qiniu_RS_EntryPathPair;
+
+/* @endgist */
+
+Qiniu_Error Qiniu_RS_BatchMove(
+        Qiniu_Client* self, Qiniu_RS_BatchItemRet* rets,
+        Qiniu_RS_EntryPathPair* entryPairs, Qiniu_ItemCount entryCount);
+
+Qiniu_Error Qiniu_RS_BatchCopy(
+        Qiniu_Client* self, Qiniu_RS_BatchItemRet* rets,
+        Qiniu_RS_EntryPathPair* entryPairs, Qiniu_ItemCount entryCount);
+
+/*============================================================================*/
+
+#pragma pack()
 
 #endif /* QINIU_RS_H */
-
