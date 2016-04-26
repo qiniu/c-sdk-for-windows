@@ -12,7 +12,7 @@
 
 ## 使用
 
-参考文档：[七牛云存储 C SDK 使用指南](https://github.com/qiniu/c-sdk/tree/develop/docs)
+参考文档：[七牛云存储 C SDK 使用指南](http://developer.qiniu.com/code/v6/sdk/cpp.html)
 
 ## 许可证
 
