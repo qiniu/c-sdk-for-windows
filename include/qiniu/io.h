@@ -11,6 +11,7 @@
 #define QINIU_IO_H
 
 #include "http.h"
+#include "reader.h"
 
 #pragma pack(1)
 
@@ -42,6 +43,12 @@ typedef struct _Qiniu_Io_PutExtra {
 	// which returns a JSON object.
 	void* callbackRet;
 	Qiniu_Error (*callbackRetParser)(void*, Qiniu_Json*);
+
+	// For those who want to abort uploading data to server.
+	void * upAbortUserData;
+	Qiniu_Rd_FnAbort upAbortCallback;
+
+    const char *upHost;
 } Qiniu_Io_PutExtra;
 
 /*============================================================================*/
@@ -50,7 +57,10 @@ typedef struct _Qiniu_Io_PutExtra {
 typedef struct _Qiniu_Io_PutRet {
 	const char* hash;
 	const char* key;
+    const char* persistentId;
 } Qiniu_Io_PutRet;
+
+typedef size_t (*rdFunc)(void* buffer, size_t size, size_t n, void* rptr);
 
 /*============================================================================*/
 /* func Qiniu_Io_PutXXX */
@@ -59,13 +69,22 @@ typedef struct _Qiniu_Io_PutRet {
 #define QINIU_UNDEFINED_KEY		NULL
 #endif
 
-Qiniu_Error Qiniu_Io_PutFile(
+QINIU_DLLAPI extern Qiniu_Error Qiniu_Io_PutFile(
 	Qiniu_Client* self, Qiniu_Io_PutRet* ret,
 	const char* uptoken, const char* key, const char* localFile, Qiniu_Io_PutExtra* extra);
 
-Qiniu_Error Qiniu_Io_PutBuffer(
+QINIU_DLLAPI extern Qiniu_Error Qiniu_Io_PutBuffer(
 	Qiniu_Client* self, Qiniu_Io_PutRet* ret,
 	const char* uptoken, const char* key, const char* buf, size_t fsize, Qiniu_Io_PutExtra* extra);
+
+QINIU_DLLAPI extern Qiniu_Error Qiniu_Io_PutStream(
+    Qiniu_Client* self, 
+	Qiniu_Io_PutRet* ret,
+    const char* uptoken, const char* key, 
+	void* ctx, // 'ctx' is the same as rdr's last param
+	size_t fsize, 
+	rdFunc rdr, 
+	Qiniu_Io_PutExtra* extra);
 
 /*============================================================================*/
 
